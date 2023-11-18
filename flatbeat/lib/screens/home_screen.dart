@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
-// Importe outros pacotes necessários aqui, como para o compartilhamento em redes sociais
+import 'package:flatbeat/widgets/custom_button.dart';
+import 'package:flatbeat/widgets/info_card.dart';
+import 'package:flatbeat/utils/constants.dart';
+import 'package:flatbeat/utils/utilities.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -8,8 +11,8 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Flabeat'),
-        // Configurações adicionais do AppBar, se necessário
+        title: const Text(AppStrings.appTitle),
+        backgroundColor: AppColors.primaryColor,
       ),
       body: const SafeArea(
         child: SingleChildScrollView(
@@ -19,7 +22,6 @@ class HomeScreen extends StatelessWidget {
               MatchInformation(),
               AdditionalInformation(),
               SocialShareSection(),
-              // Outras seções conforme necessário
             ],
           ),
         ),
@@ -38,7 +40,6 @@ class HeartRateBanner extends StatelessWidget {
       child: Column(
         children: <Widget>[
           Image.asset('assets/images/1231px-Flamengo_heart.svg.png'),
-          // Restante dos componentes do banner
         ],
       ),
     );
@@ -50,9 +51,7 @@ class MatchInformation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        // Estilização e conteúdo da seção de informações da partida
-        );
+    return Container();
   }
 }
 
@@ -61,9 +60,25 @@ class AdditionalInformation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        // Estilização e conteúdo da seção de informações adicionais
-        );
+    return const Column(
+      children: [
+        InfoCard(
+          title: 'Batimentos do 1º Tempo',
+          content: 'Detalhes do 1º Tempo aqui...',
+          icon: Icons.favorite_border,
+        ),
+        InfoCard(
+          title: 'Batimentos do 2º Tempo',
+          content: 'Detalhes do 2º Tempo aqui...',
+          icon: Icons.favorite_border,
+        ),
+        InfoCard(
+          title: 'Batimentos do 1º Gol',
+          content: 'Detalhes do Gol aqui...',
+          icon: Icons.favorite_border,
+        ),
+      ],
+    );
   }
 }
 
@@ -72,10 +87,20 @@ class SocialShareSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        // Estilização e conteúdo da seção de compartilhamento social
-        );
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 16.0),
+      child: Column(
+        children: [
+          CustomButton(
+            text: 'Compartilhar',
+            onPressed: () {
+              Utilities.showSnackbar(context, 'Compartilhando...');
+            },
+            color: AppColors.primaryColor,
+            textColor: Colors.white,
+          ),
+        ],
+      ),
+    );
   }
 }
-
-// Defina outros widgets que você precisar aqui
