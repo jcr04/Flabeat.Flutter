@@ -35,11 +35,39 @@ class HeartRateBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
+    return Container(
+      color: Colors.red, // Escolha uma cor que combine com o seu design
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: <Widget>[
-          Image.asset('assets/images/1231px-Flamengo_heart.svg.png'),
+          const Text(
+            'SEU BATIMENTO NESTA PARTIDA FOI:',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          // Adicione espaçamento ou dividers se necessário
+          Image.asset('lib/assets/imagens/1231px-Flamengo_heart.svg.png'),
+          const Text(
+            'FLAMENGO vs. OUTRO TIME',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+          // Adicione o Slider aqui
+          // ...
+          const Text(
+            'BPM',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
+            ),
+          ),
+          // Adicione outras informações como necessário
         ],
       ),
     );
