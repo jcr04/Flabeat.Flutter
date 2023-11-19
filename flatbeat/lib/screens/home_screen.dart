@@ -34,10 +34,10 @@ class HeartRateBanner extends StatefulWidget {
   const HeartRateBanner({Key? key}) : super(key: key);
 
   @override
-  _HeartRateBannerState createState() => _HeartRateBannerState();
+  HeartRateBannerState createState() => HeartRateBannerState();
 }
 
-class _HeartRateBannerState extends State<HeartRateBanner> {
+class HeartRateBannerState extends State<HeartRateBanner> {
   double _currentSliderValue = 60;
 
   @override

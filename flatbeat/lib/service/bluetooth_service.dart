@@ -39,6 +39,7 @@ class BluetoothService {
   Future<void> discoverServices(BluetoothDevice device) async {
     List<BluetoothService> services =
         (await device.discoverServices()).cast<BluetoothService>();
+    // ignore: unused_local_variable
     for (var service in services) {
       // Faz algo com cada serviço descoberto
     }
@@ -53,6 +54,10 @@ class BluetoothService {
   // Desconectar do dispositivo
   void disconnectFromDevice(BluetoothDevice device) {
     device.disconnect();
+  }
+
+  void stopScan() {
+    flutterBlue.stopScan();
   }
 
   // Implemente mais métodos conforme necessário...
