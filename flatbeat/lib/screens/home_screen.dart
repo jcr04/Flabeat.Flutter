@@ -30,13 +30,20 @@ class HomeScreen extends StatelessWidget {
   }
 }
 
-class HeartRateBanner extends StatelessWidget {
-  const HeartRateBanner({super.key});
+class HeartRateBanner extends StatefulWidget {
+  const HeartRateBanner({Key? key}) : super(key: key);
+
+  @override
+  _HeartRateBannerState createState() => _HeartRateBannerState();
+}
+
+class _HeartRateBannerState extends State<HeartRateBanner> {
+  double _currentSliderValue = 60;
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.red, // Escolha uma cor que combine com o seu design
+      color: Colors.red,
       padding: const EdgeInsets.all(16.0),
       child: Column(
         children: <Widget>[
@@ -48,7 +55,6 @@ class HeartRateBanner extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          // Adicione espaçamento ou dividers se necessário
           Image.asset('lib/assets/imagens/1231px-Flamengo_heart.svg.png'),
           const Text(
             'FLAMENGO vs. OUTRO TIME',
@@ -58,11 +64,23 @@ class HeartRateBanner extends StatelessWidget {
               fontWeight: FontWeight.bold,
             ),
           ),
-          // Adicione o Slider aqui
-          // ...
-          const Text(
-            'BPM',
-            style: TextStyle(
+          Slider(
+            value: _currentSliderValue,
+            min: 0,
+            max: 200,
+            divisions: 100,
+            label: _currentSliderValue.round().toString(),
+            onChanged: (double value) {
+              setState(() {
+                _currentSliderValue = value;
+              });
+            },
+            activeColor: Colors.white,
+            inactiveColor: Colors.white30,
+          ),
+          Text(
+            '${_currentSliderValue.round()} BPM',
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 18,
             ),
