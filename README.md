@@ -1,5 +1,9 @@
 # Flabeat
 
+## Documentação Técnica
+Leia [Codedoc.MD](https://github.com/jcr04/Flabeat.Flutter/blob/main/Codedoc.md)
+
+
 ## Descrição
 
 Flabeat é um aplicativo Flutter desenvolvido para conectar-se a dispositivos Bluetooth, como pulseiras de monitoramento de batimentos cardíacos, permitindo aos usuários visualizar e interagir com os dados desses dispositivos em tempo real.
