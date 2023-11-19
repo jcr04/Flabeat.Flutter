@@ -51,6 +51,10 @@ Inclui testes unitários para validar lógica de negócios e funções individua
 - **Desafio**: Manter uma conexão Bluetooth estável e gerenciar diferentes estados de dispositivos.
 - **Solução**: Implementação de um robusto sistema de tratamento de erros e verificações de estado para gerenciar conexões Bluetooth de forma eficiente.
 
+## Desevolvimento do Prótotipo
+![Screenshot_1](https://github.com/jcr04/Flabeat.Flutter/assets/70778525/bae2a28a-3b3b-49c5-bf52-15ed3b9da345)
+
+
 ## Conclusão
 
 Esta documentação técnica oferece uma visão detalhada do desenvolvimento do Flabeat, cobrindo desde a estrutura do projeto até as soluções de desafios específicos. Para detalhes adicionais e compreensão mais profunda, recomendamos consultar os comentários no código e a documentação de cada componente e biblioteca utilizada.
