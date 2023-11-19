@@ -1,3 +1,4 @@
+import 'package:flatbeat/screens/device_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flatbeat/widgets/custom_button.dart';
 import 'package:flatbeat/widgets/info_card.dart';
@@ -13,6 +14,17 @@ class HomeScreen extends StatelessWidget {
       appBar: AppBar(
         title: const Text(AppStrings.appTitle),
         backgroundColor: AppColors.primaryColor,
+        actions: <Widget>[
+          IconButton(
+            icon: const Icon(Icons.bluetooth),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const DeviceScreen()),
+              );
+            },
+          ),
+        ],
       ),
       body: const SafeArea(
         child: SingleChildScrollView(
