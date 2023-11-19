@@ -23,7 +23,7 @@ O aplicativo segue o padrão Modelo-Visão-Controlador (MVC), separando a lógic
 
 ### Serviços Bluetooth
 
-Utiliza a biblioteca `flutter_blue` para gerenciar a comunicação Bluetooth. Esta biblioteca oferece uma API simplificada para descobrir, conectar e interagir com dispositivos Bluetooth.
+Utiliza a biblioteca [`flutter_blue`](https://pub.dev/packages/flutter_blue/versions/0.8.0) para gerenciar a comunicação Bluetooth. Esta biblioteca oferece uma API simplificada para descobrir, conectar e interagir com dispositivos Bluetooth.
 
 ## Funcionalidades Principais
 
