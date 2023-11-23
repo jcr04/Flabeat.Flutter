@@ -1,16 +1,13 @@
+import 'package:flatbeat/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flatbeat/utils/constants.dart';
 
 class InfoCard extends StatelessWidget {
-  final String title;
-  final String content;
-  final IconData icon;
+  final Info info;
 
   const InfoCard({
     Key? key,
-    required this.title,
-    required this.content,
-    required this.icon,
+    required this.info,
   }) : super(key: key);
 
   @override
@@ -21,20 +18,24 @@ class InfoCard extends StatelessWidget {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(10.0),
       ),
-      child: ListTile(
-        leading: Icon(icon, size: 28, color: Colors.white),
+      child: ExpansionTile(
+        leading: const Icon(Icons.favorite, size: 28, color: Colors.white),
         title: Text(
-          title,
+          info.title,
           style: const TextStyle(
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),
         ),
-        subtitle: Text(
-          content,
-          style: const TextStyle(color: Colors.white70),
-        ),
-        isThreeLine: true,
+        children: <Widget>[
+          Container(
+            padding: const EdgeInsets.all(16.0),
+            child: Text(
+              info.content,
+              style: const TextStyle(color: Colors.white70),
+            ),
+          ),
+        ],
       ),
     );
   }
