@@ -5,6 +5,7 @@ import 'package:flatbeat/widgets/custom_button.dart';
 import 'package:flatbeat/widgets/info_card.dart';
 import 'package:flatbeat/utils/constants.dart';
 import 'package:flatbeat/utils/utilities.dart';
+import 'package:flatbeat/screens/perfil_screen.dart';
 
 void main() {
   runApp(
@@ -66,7 +67,7 @@ class HomeScreen extends StatelessWidget {
               SingleChildScrollView(child: HomeContent()),
               // Substitua pelos widgets de conteúdo de cada aba
               Center(child: Text('ASSOCIAÇÃO')),
-              Center(child: Text('PERFIL')),
+              PerfilScreen(),
             ],
           ),
         ),
@@ -80,7 +81,6 @@ class HomeContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Envolve os widgets em um Container com decoração de gradiente
     return Container(
       decoration: const BoxDecoration(
         gradient: LinearGradient(
@@ -145,7 +145,6 @@ class HeartRateBanner extends StatelessWidget {
             fontSize: 18,
           ),
         ),
-        // Outros widgets...
       ],
     );
   }
@@ -156,10 +155,7 @@ class MatchInformation extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Se houver lógica para buscar os dados, mova para um provedor
-    return Container(
-        // Implementação da UI
-        );
+    return Container();
   }
 }
 
@@ -201,7 +197,6 @@ class SocialShareSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Se a ação de compartilhar envolve lógica de negócios, mova para um provedor
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 16.0),
       child: Column(
@@ -209,7 +204,6 @@ class SocialShareSection extends StatelessWidget {
           CustomButton(
             text: 'Compartilhar',
             onPressed: () {
-              // Considerar movendo a lógica de 'showSnackbar' para um provedor se mais complexo
               Utilities.showSnackbar(context, 'Compartilhando...');
             },
             color: AppColors.primaryColor,
