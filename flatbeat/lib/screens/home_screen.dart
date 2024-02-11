@@ -1,3 +1,4 @@
+import 'package:flatbeat/screens/associacao_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flatbeat/screens/device_screen.dart';
@@ -40,7 +41,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
-      length: 3, // Número de abas
+      length: 3,
       child: Scaffold(
         appBar: AppBar(
           title: const Text(AppStrings.appTitle),
@@ -64,9 +65,8 @@ class HomeScreen extends StatelessWidget {
         body: const SafeArea(
           child: TabBarView(
             children: [
-              SingleChildScrollView(child: HomeContent()),
-              // Substitua pelos widgets de conteúdo de cada aba
-              Center(child: Text('ASSOCIAÇÃO')),
+              HomeContent(),
+              AssociacaoScreen(),
               PerfilScreen(),
             ],
           ),
@@ -81,24 +81,81 @@ class HomeContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [
-            Colors.red, // Cor vermelha oficial do Flamengo
-            Colors.black, // Cor preta oficial do Flamengo
+    return SingleChildScrollView(
+      // Isso permite que a coluna seja rolável
+      child: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Colors.red, // Cor vermelha oficial do Flamengo
+              Colors.black, // Cor preta oficial do Flamengo
+            ],
+          ),
+        ),
+        child: Column(
+          children: [
+            const HeartRateBanner(),
+            const GameSection(),
+            const MatchInformation(),
+            const AdditionalInformation(),
+            const SocialShareSection(),
+            SizedBox(height: MediaQuery.of(context).size.height * 0.1),
           ],
         ),
       ),
-      child: const Column(
-        children: [
-          HeartRateBanner(),
-          MatchInformation(),
-          AdditionalInformation(),
-          SocialShareSection(),
-        ],
+    );
+  }
+}
+
+class GameSection extends StatelessWidget {
+  const GameSection({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      padding: const EdgeInsets.all(16.0),
+      child: Card(
+        color: AppColors.primaryColor,
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Column(
+            children: [
+              const Text(
+                'FLA vs. OutroTime',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 24.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+              const SizedBox(height: 10),
+              const Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(Icons.sports_soccer, color: Colors.white),
+                  Text(
+                    " 0 x 0 ",
+                    style: TextStyle(color: Colors.white, fontSize: 24.0),
+                  ),
+                  Icon(Icons.sports_soccer, color: Colors.white),
+                ],
+              ),
+              const SizedBox(height: 10),
+              ElevatedButton(
+                onPressed: () {
+                  // Implementar navegação para a tela de histórico
+                },
+                style: ElevatedButton.styleFrom(
+                  foregroundColor: AppColors.primaryColor,
+                  backgroundColor: Colors.white,
+                ),
+                child: const Text('Acesse seu histórico'),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

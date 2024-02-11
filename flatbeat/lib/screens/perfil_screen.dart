@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:flatbeat/utils/constants.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flatbeat/utils/constants.dart';
 
 class PerfilScreen extends StatefulWidget {
   const PerfilScreen({Key? key}) : super(key: key);
@@ -11,44 +11,100 @@ class PerfilScreen extends StatefulWidget {
 }
 
 class _PerfilScreenState extends State<PerfilScreen> {
-  File? _imageFile;
+  File? _profileImage;
   final ImagePicker _picker = ImagePicker();
-  final TextEditingController _nameController =
-      TextEditingController(text: 'João Rebouças');
-  final TextEditingController _ageController =
-      TextEditingController(text: '25');
-  final TextEditingController _fanYearsController =
-      TextEditingController(text: '15');
-  bool _isEditing = false;
+  final List<File> _memeFiles =
+      []; // Lista dinâmica para armazenar arquivos de memes
 
-  Future<void> _pickImage() async {
-    final XFile? pickedFile =
-        await _picker.pickImage(source: ImageSource.gallery);
+  final TextEditingController _usernameController =
+      TextEditingController(text: 'Geovanna Sodré');
+  final TextEditingController _descriptionController =
+      TextEditingController(text: 'Flamenguista');
+
+  Future<void> _editProfile(BuildContext context) async {
+    final TextEditingController _editUsernameController =
+        TextEditingController(text: _usernameController.text);
+    final TextEditingController _editDescriptionController =
+        TextEditingController(text: _descriptionController.text);
+
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('Editar Perfil'),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                controller: _editUsernameController,
+                decoration: const InputDecoration(labelText: 'Nome'),
+              ),
+              TextField(
+                controller: _editDescriptionController,
+                decoration: const InputDecoration(labelText: 'Descrição'),
+              ),
+            ],
+          ),
+          actions: [
+            TextButton(
+              child: const Text('Cancelar'),
+              onPressed: () => Navigator.of(context).pop(),
+            ),
+            TextButton(
+              child: const Text('Salvar'),
+              onPressed: () {
+                setState(() {
+                  _usernameController.text = _editUsernameController.text;
+                  _descriptionController.text = _editDescriptionController.text;
+                });
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  Future<void> _pickImage(ImageSource source,
+      {bool isProfileImage = false}) async {
+    final XFile? pickedFile = await _picker.pickImage(source: source);
     if (pickedFile != null) {
       setState(() {
-        _imageFile = File(pickedFile.path);
+        if (isProfileImage) {
+          _profileImage = File(pickedFile.path);
+        } else {
+          _memeFiles.add(File(pickedFile.path));
+        }
       });
     }
   }
 
-  void _toggleEdit() {
-    setState(() {
-      _isEditing = !_isEditing;
-    });
+  Widget _buildMemeGallery() {
+    return SizedBox(
+      height: 120,
+      child: ListView.builder(
+        scrollDirection: Axis.horizontal,
+        itemCount: _memeFiles.length,
+        itemBuilder: (BuildContext context, int index) {
+          return Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: ClipRRect(
+              borderRadius: BorderRadius.circular(8.0),
+              child: Image.file(_memeFiles[index], fit: BoxFit.cover),
+            ),
+          );
+        },
+      ),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Perfil'),
+        title: Text(_usernameController.text),
         backgroundColor: AppColors.primaryColor,
-        actions: [
-          IconButton(
-            icon: Icon(_isEditing ? Icons.check : Icons.edit),
-            onPressed: _toggleEdit,
-          ),
-        ],
       ),
       body: Container(
         decoration: const BoxDecoration(
@@ -59,88 +115,63 @@ class _PerfilScreenState extends State<PerfilScreen> {
           ),
         ),
         child: SafeArea(
-          child: Center(
-            child: SingleChildScrollView(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const SizedBox(height: 30),
-                  CircleAvatar(
-                    radius: 60,
-                    backgroundColor: Colors.grey,
-                    backgroundImage:
-                        _imageFile != null ? FileImage(_imageFile!) : null,
-                    child: _imageFile == null
-                        ? const Icon(Icons.camera_alt,
-                            size: 60, color: Colors.white)
+          bottom: false,
+          child: SingleChildScrollView(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const SizedBox(height: 70),
+                GestureDetector(
+                  onTap: () =>
+                      _pickImage(ImageSource.gallery, isProfileImage: true),
+                  child: CircleAvatar(
+                    radius: 50,
+                    backgroundImage: _profileImage != null
+                        ? FileImage(_profileImage!)
+                        : null,
+                    child: _profileImage == null
+                        ? const Icon(Icons.camera_alt, size: 50)
                         : null,
                   ),
-                  TextButton(
-                    onPressed: _pickImage,
-                    child: const Text('Adicionar Foto',
-                        style: TextStyle(color: Colors.white)),
-                  ),
-                  if (!_isEditing)
-                    Column(
-                      children: [
-                        Text(_nameController.text,
-                            style: const TextStyle(
-                                color: Colors.white,
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold)),
-                        Text('Idade: ${_ageController.text}',
-                            style: const TextStyle(
-                                color: Colors.white70, fontSize: 18)),
-                        Text('Torcedor há ${_fanYearsController.text} anos',
-                            style: const TextStyle(
-                                color: Colors.white70, fontSize: 18)),
-                      ],
-                    )
-                  else
-                    Column(
-                      children: [
-                        TextFormField(
-                          controller: _nameController,
-                          style: const TextStyle(color: Colors.white),
-                          decoration: const InputDecoration(
-                            labelText: 'Nome',
-                            labelStyle: TextStyle(color: Colors.white70),
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white70)),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white)),
-                          ),
-                        ),
-                        TextFormField(
-                          controller: _ageController,
-                          keyboardType: TextInputType.number,
-                          style: const TextStyle(color: Colors.white),
-                          decoration: const InputDecoration(
-                            labelText: 'Idade',
-                            labelStyle: TextStyle(color: Colors.white70),
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white70)),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white)),
-                          ),
-                        ),
-                        TextFormField(
-                          controller: _fanYearsController,
-                          keyboardType: TextInputType.number,
-                          style: const TextStyle(color: Colors.white),
-                          decoration: const InputDecoration(
-                            labelText: 'Torcedor há',
-                            labelStyle: TextStyle(color: Colors.white70),
-                            enabledBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white70)),
-                            focusedBorder: UnderlineInputBorder(
-                                borderSide: BorderSide(color: Colors.white)),
-                          ),
-                        ),
-                      ],
+                ),
+                const SizedBox(height: 60),
+                Text(
+                  _usernameController.text,
+                  style: const TextStyle(color: Colors.white, fontSize: 24),
+                ),
+                Text(
+                  _descriptionController.text,
+                  style: const TextStyle(color: Colors.white70, fontSize: 16),
+                ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    ElevatedButton(
+                      onPressed: () => _editProfile(context),
+                      child: const Text('Editar perfil'),
                     ),
-                ],
-              ),
+                    ElevatedButton(
+                      onPressed:
+                          () {}, // Implemente a funcionalidade de compartilhamento
+                      child: const Text('Compartilhar'),
+                    ),
+                  ],
+                ),
+                const SizedBox(height: 70),
+                const Text(
+                  'Galeria de memes',
+                  style: TextStyle(color: Colors.white, fontSize: 18),
+                ),
+                _buildMemeGallery(),
+                ElevatedButton(
+                  onPressed: () => _pickImage(ImageSource.gallery),
+                  style: ElevatedButton.styleFrom(
+                    foregroundColor: Colors.white,
+                    backgroundColor: AppColors.primaryColor,
+                  ),
+                  child: const Text('Adicionar Meme'),
+                ),
+              ],
             ),
           ),
         ),
