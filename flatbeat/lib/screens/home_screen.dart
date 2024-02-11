@@ -1,23 +1,45 @@
 import 'package:flatbeat/screens/associacao_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:flatbeat/screens/device_screen.dart';
 import 'package:flatbeat/widgets/custom_button.dart';
 import 'package:flatbeat/widgets/info_card.dart';
 import 'package:flatbeat/utils/constants.dart';
 import 'package:flatbeat/utils/utilities.dart';
 import 'package:flatbeat/screens/perfil_screen.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flatbeat/service/api_service.dart';
+import 'package:flatbeat/data/models/partida.dart';
+import 'package:flatbeat/providers/heart_rate_provider.dart';
 
 void main() {
   runApp(
-    MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (_) => HeartRateProvider()),
-        // Outros providers vão aqui
-      ],
-      child: const MyApp(),
+    const ProviderScope(
+      child: MyApp(),
     ),
   );
+}
+
+class ProximaPartidaNotifier extends StateNotifier<AsyncValue<Partida?>> {
+  ProximaPartidaNotifier(this.ref) : super(const AsyncValue.loading()) {
+    _fetchProximaPartida();
+  }
+
+  final Ref ref;
+  final proximaPartidaProvider =
+      StateNotifierProvider<ProximaPartidaNotifier, AsyncValue<Partida?>>(
+          (ref) {
+    return ProximaPartidaNotifier(ref.read as Ref<Object?>);
+  });
+
+  Future<void> _fetchProximaPartida() async {
+    try {
+      final partida = await ref.read(apiServiceProvider).getProximaPartida();
+      state = AsyncValue.data(partida);
+    } catch (e) {
+      state = AsyncValue.error(
+          e, StackTrace.current); // Adicione StackTrace.current
+    }
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -109,51 +131,63 @@ class HomeContent extends StatelessWidget {
   }
 }
 
-class GameSection extends StatelessWidget {
+class GameSection extends ConsumerWidget {
   const GameSection({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final partidaAsyncValue = ref.watch(proximaPartidaProvider);
+
     return Container(
       padding: const EdgeInsets.all(16.0),
       child: Card(
         color: AppColors.primaryColor,
         child: Padding(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              const Text(
-                'FLA vs. OutroTime',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 24.0,
-                  fontWeight: FontWeight.bold,
-                ),
-              ),
-              const SizedBox(height: 10),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+          child: partidaAsyncValue.when(
+            loading: () => const CircularProgressIndicator(),
+            error: (err, stack) => Text('Erro: $err'),
+            data: (partida) {
+              if (partida == null) {
+                return const Text('Nenhuma partida encontrada');
+              }
+              return Column(
                 children: [
-                  Icon(Icons.sports_soccer, color: Colors.white),
                   Text(
-                    " 0 x 0 ",
-                    style: TextStyle(color: Colors.white, fontSize: 24.0),
+                    '${partida.timeCasa} vs ${partida.timeFora}',
+                    style: const TextStyle(
+                      color: Colors.white,
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  Icon(Icons.sports_soccer, color: Colors.white),
+                  const SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.sports_soccer, color: Colors.white),
+                      Text(
+                        " ${partida.golsCasa ?? '_'} x ${partida.golsFora ?? '_'} ",
+                        style: const TextStyle(
+                            color: Colors.white, fontSize: 24.0),
+                      ),
+                      const Icon(Icons.sports_soccer, color: Colors.white),
+                    ],
+                  ),
+                  const SizedBox(height: 10),
+                  ElevatedButton(
+                    onPressed: () {
+                      // Implementar navegação para a tela de histórico
+                    },
+                    style: ElevatedButton.styleFrom(
+                      foregroundColor: AppColors.primaryColor,
+                      backgroundColor: Colors.white,
+                    ),
+                    child: const Text('Acesse seu histórico'),
+                  ),
                 ],
-              ),
-              const SizedBox(height: 10),
-              ElevatedButton(
-                onPressed: () {
-                  // Implementar navegação para a tela de histórico
-                },
-                style: ElevatedButton.styleFrom(
-                  foregroundColor: AppColors.primaryColor,
-                  backgroundColor: Colors.white,
-                ),
-                child: const Text('Acesse seu histórico'),
-              ),
-            ],
+              );
+            },
           ),
         ),
       ),
@@ -179,24 +213,23 @@ class HeartRateBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final heartRateProvider = Provider.of<HeartRateProvider>(context);
+    final heartRate = ref.watch(heartRateProvider);
     return Column(
       children: [
         Image.asset('lib/assets/imagens/1231px-Flamengo_heart.svg.png'),
         Slider(
-          value: heartRateProvider.currentHeartRate,
+          value: heartRate,
           min: 0,
           max: 200,
           divisions: 100,
-          label: heartRateProvider.currentHeartRate.round().toString(),
-          onChanged: (double value) {
-            heartRateProvider.updateHeartRate(value);
-          },
+          label: heartRate.round().toString(),
+          onChanged: (value) =>
+              ref.read(heartRateProvider.notifier).updateHeartRate(value),
           activeColor: const Color.fromARGB(255, 248, 239, 239),
           inactiveColor: const Color.fromARGB(77, 39, 2, 2),
         ),
         Text(
-          '${heartRateProvider.currentHeartRate.round()} BPM',
+          '$heartRate BPM',
           style: const TextStyle(
             color: Colors.white,
             fontSize: 18,

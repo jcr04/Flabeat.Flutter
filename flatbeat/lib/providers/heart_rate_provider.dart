@@ -1,14 +1,16 @@
-import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class HeartRateProvider with ChangeNotifier {
-  double _currentHeartRate = 60;
+final heartRateProvider =
+    StateNotifierProvider<HeartRateNotifier, double>((ref) {
+  return HeartRateNotifier();
+});
 
-  double get currentHeartRate => _currentHeartRate;
+class HeartRateNotifier extends StateNotifier<double> {
+  HeartRateNotifier() : super(60);
 
   void updateHeartRate(double newRate) {
-    if (_currentHeartRate != newRate) {
-      _currentHeartRate = newRate;
-      notifyListeners();
+    if (state != newRate) {
+      state = newRate;
     }
   }
 }
