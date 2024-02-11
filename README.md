@@ -31,7 +31,13 @@ Flabeat é um aplicativo Flutter desenvolvido para conectar-se a dispositivos Bl
 
 ## Telas
 #### Tela Home
-![Screenshot_6](https://github.com/jcr04/Flabeat.Flutter/assets/70778525/2770a27a-bece-4a86-bef1-472b8d6bea6c)
-)
+![Screenshot_4](https://github.com/jcr04/Flabeat.Flutter/assets/70778525/1ea774cb-e1c3-433e-b5cb-2282cca309ff)
+
+#### Tela de Associação
+![Screenshot_9](https://github.com/jcr04/Flabeat.Flutter/assets/70778525/af9d23f7-c9cc-4b2d-be59-05a3f1bc18a5)
+
+#### Tela de Detalhes da Partida
+![Screenshot_8](https://github.com/jcr04/Flabeat.Flutter/assets/70778525/56470c58-9767-4ba4-812e-64d4c7a8d423)
+
 #### Tela de Perfil
-![Screenshot_11](https://github.com/jcr04/Flabeat.Flutter/assets/70778525/ad935287-5e2c-4278-b567-84a3cd6a0759)
+![Screenshot_6](https://github.com/jcr04/Flabeat.Flutter/assets/70778525/0120ec76-ff43-46cb-aa0d-67f8043c1c19)
