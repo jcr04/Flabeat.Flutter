@@ -34,3 +34,4 @@ flutter:
   assets:
     - lib/assets/imagens/1231px-Flamengo_heart.svg.png
     - lib\assets\imagens\flamengo-imagem-1.png
+    - .env
