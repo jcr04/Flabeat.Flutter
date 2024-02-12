@@ -1,3 +1,4 @@
+import 'package:flatbeat/main.dart';
 import 'package:flatbeat/screens/associacao_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flatbeat/screens/device_screen.dart';
@@ -14,10 +15,15 @@ import 'package:flatbeat/providers/heart_rate_provider.dart';
 void main() {
   runApp(
     const ProviderScope(
-      child: MyApp(),
+      child: FlabeatApp(),
     ),
   );
 }
+
+final proximaPartidaProvider =
+    StateNotifierProvider<ProximaPartidaNotifier, AsyncValue<Partida?>>((ref) {
+  return ProximaPartidaNotifier(ref);
+});
 
 class ProximaPartidaNotifier extends StateNotifier<AsyncValue<Partida?>> {
   ProximaPartidaNotifier(this.ref) : super(const AsyncValue.loading()) {
@@ -25,11 +31,6 @@ class ProximaPartidaNotifier extends StateNotifier<AsyncValue<Partida?>> {
   }
 
   final Ref ref;
-  final proximaPartidaProvider =
-      StateNotifierProvider<ProximaPartidaNotifier, AsyncValue<Partida?>>(
-          (ref) {
-    return ProximaPartidaNotifier(ref.read as Ref<Object?>);
-  });
 
   Future<void> _fetchProximaPartida() async {
     try {
@@ -146,7 +147,7 @@ class GameSection extends ConsumerWidget {
           padding: const EdgeInsets.all(16.0),
           child: partidaAsyncValue.when(
             loading: () => const CircularProgressIndicator(),
-            error: (err, stack) => Text('Erro: $err'),
+            error: (error, stack) => Text('Erro: $error'),
             data: (partida) {
               if (partida == null) {
                 return const Text('Nenhuma partida encontrada');
@@ -208,11 +209,11 @@ class HeartRateProvider with ChangeNotifier {
   }
 }
 
-class HeartRateBanner extends StatelessWidget {
+class HeartRateBanner extends ConsumerWidget {
   const HeartRateBanner({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final heartRate = ref.watch(heartRateProvider);
     return Column(
       children: [
